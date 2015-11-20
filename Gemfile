@@ -7,6 +7,7 @@ gem 'sinatra'
 gem 'sinatra-json'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'omniauth-github'
 
 group :test do
   gem 'minitest'
