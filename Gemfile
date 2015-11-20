@@ -5,5 +5,8 @@ gem 'sinatra'
 gem 'sinatra-json'
 gem 'omniauth'
 gem 'omniauth-twitter'
-gem 'minitest'
-gem 'rack-test'
+
+group :test do
+  gem 'minitest'
+  gem 'rack-test'
+end
