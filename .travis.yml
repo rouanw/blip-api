@@ -1,0 +1,4 @@
+sudo: false
+language: ruby
+before_script:
+  - bundle install
