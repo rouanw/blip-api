@@ -14,7 +14,7 @@ get '/status' do
   json :status => 'running'
 end
 
-post '/auth/:name/callback' do
+get '/auth/:provider/callback' do
   auth = request.env['omniauth.auth']
   json auth
 end
