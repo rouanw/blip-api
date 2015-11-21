@@ -15,12 +15,12 @@ end
 
 describe "oauth login with twitter" do
   it "should be ok" do
-    post '/auth/twitter/callback'
+    get '/auth/twitter/callback'
     assert last_response.status.must_equal 200
   end
 
   it "should echo back the auth hash for now" do
-    post '/auth/twitter/callback'
+    get '/auth/twitter/callback'
     last_response.body.must_include '{"name":"Example User"}'
   end
 end
