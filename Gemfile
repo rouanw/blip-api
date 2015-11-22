@@ -8,6 +8,7 @@ gem 'sinatra-json'
 gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'omniauth-github'
+gem 'mongoid'
 
 group :test do
   gem 'minitest'

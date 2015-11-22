@@ -4,6 +4,6 @@ require 'minitest/spec'
 require 'minitest/pride'
 require 'rack/test'
 
-require File.expand_path '../../app.rb', __FILE__
+require File.expand_path '../../app/app.rb', __FILE__
 
 OmniAuth.config.test_mode = true

@@ -3,6 +3,7 @@ require "sinatra/json"
 require 'omniauth'
 require 'omniauth-twitter'
 require 'omniauth-github'
+require 'mongoid'
 
 use Rack::Session::Cookie
 use OmniAuth::Builder do
