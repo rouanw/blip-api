@@ -13,4 +13,6 @@ gem 'mongoid'
 group :test do
   gem 'minitest'
   gem 'rack-test'
+  gem 'minitest-matchers'
+  gem 'mongoid-minitest'
 end

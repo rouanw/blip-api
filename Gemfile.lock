@@ -19,6 +19,11 @@ GEM
     json (1.8.3)
     jwt (1.5.2)
     minitest (5.8.3)
+    minitest-activemodel (1.1.0)
+      activemodel (>= 3.2)
+      minitest (~> 5.0)
+    minitest-matchers (1.4.1)
+      minitest (~> 5.0)
     mongo (2.1.2)
       bson (~> 3.0)
     mongoid (5.0.1)
@@ -26,6 +31,10 @@ GEM
       mongo (~> 2.1)
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
+    mongoid-minitest (1.1.0)
+      minitest (~> 5.0)
+      minitest-activemodel (~> 1.1)
+      mongoid (>= 3)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -75,7 +84,9 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
+  minitest-matchers
   mongoid
+  mongoid-minitest
   omniauth
   omniauth-github
   omniauth-twitter
