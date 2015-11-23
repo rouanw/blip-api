@@ -4,6 +4,7 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'omniauth-github'
 require 'mongoid'
+require_relative 'models/person'
 
 use Rack::Session::Cookie
 use OmniAuth::Builder do
@@ -11,11 +12,14 @@ use OmniAuth::Builder do
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
 end
 
+Mongoid.load!("config/mongoid.yml")
+
 get '/status' do
   json :status => 'running'
 end
 
 get '/auth/:provider/callback' do
   auth = request.env['omniauth.auth']
+  Person.create provider: auth.provider, uid: auth.uid, info: auth.info
   json auth
 end

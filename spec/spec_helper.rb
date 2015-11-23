@@ -1,7 +1,6 @@
 ENV['RACK_ENV'] = 'test'
 require 'rspec'
 require 'rack/test'
-require 'mongoid'
 require 'mongoid-rspec'
 
 require File.expand_path '../../app/app.rb', __FILE__
@@ -18,5 +17,5 @@ module RSpecMixin
 end
 
 RSpec.configure do |config|
-  config.include Mongoid::Matchers, type: :model
+  config.include Mongoid::Matchers
 end
