@@ -20,6 +20,5 @@ end
 
 get '/auth/:provider/callback' do
   auth = request.env['omniauth.auth']
-  Person.create provider: auth.provider, uid: auth.uid, info: auth.info
-  json auth
+  json Person.create provider: auth.provider, uid: auth.uid, info: auth.info
 end

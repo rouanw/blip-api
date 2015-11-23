@@ -22,9 +22,10 @@ describe "oauth login" do
     expect(last_response.status).to be 200
   end
 
-  it "should echo back the auth hash for now" do
+  it "should return the person created" do
+    allow(Person).to receive(:create).and_return({name: 'someone', uid: '123'})
     get '/auth/twitter/callback'
-    expect(last_response.body).to include '{"name":"Example User"}'
+    expect(last_response.body).to include '{"name":"someone","uid":"123"}'
   end
 
   it "should create a person with selected auth info" do
