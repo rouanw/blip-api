@@ -11,8 +11,7 @@ gem 'omniauth-github'
 gem 'mongoid'
 
 group :test do
-  gem 'minitest'
+  gem 'rspec'
   gem 'rack-test'
-  gem 'minitest-matchers'
-  gem 'mongoid-minitest'
+  gem 'mongoid-rspec'
 end
