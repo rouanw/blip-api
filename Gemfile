@@ -4,6 +4,7 @@ ruby '2.2.3'
 
 gem 'rake'
 gem 'sinatra'
+gem 'thin'
 gem 'sinatra-json'
 gem 'omniauth'
 gem 'omniauth-twitter'
