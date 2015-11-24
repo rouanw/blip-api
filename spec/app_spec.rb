@@ -50,3 +50,21 @@ describe "oauth login" do
     expect(@bob.info).to eq(auth[:info])
   end
 end
+
+describe "update assessment" do
+  before(:each) do
+    class_double('Person').as_stubbed_const(:transfer_nested_constants => true)
+    allow(Person).to receive(:find).and_return('')
+  end
+
+  it "update assessments for the person with a matching id" do
+    params = {:person_id => '123', :assessments => ['assessment', 'assessment2']}
+    found = double('found person')
+    allow(Person).to receive(:find).with('123').and_return(found)
+
+    expect(found).to receive(:assessments=).with(params[:assessments])
+    expect(found).to receive(:save)
+
+    put '/assessments', params
+  end
+end
