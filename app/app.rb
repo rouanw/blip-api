@@ -20,5 +20,8 @@ end
 
 get '/auth/:provider/callback' do
   auth = request.env['omniauth.auth']
-  json Person.create provider: auth.provider, uid: auth.uid, info: auth.info
+  person = Person.find_or_create_by(provider: auth.provider, uid: auth.uid) do |p|
+    p.info = auth.info
+  end
+  json person
 end
