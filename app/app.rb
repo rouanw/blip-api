@@ -26,6 +26,10 @@ get '/auth/:provider/callback' do
   json person
 end
 
+get '/person/:id' do
+  json Person.find params[:id]
+end
+
 put '/assessments' do
   person = Person.find params[:person_id]
   person.assessments = params[:assessments]

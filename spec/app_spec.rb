@@ -54,7 +54,6 @@ end
 describe "update assessment" do
   before(:each) do
     class_double('Person').as_stubbed_const(:transfer_nested_constants => true)
-    allow(Person).to receive(:find).and_return('')
   end
 
   it "update assessments for the person with a matching id" do
@@ -66,5 +65,17 @@ describe "update assessment" do
     expect(found).to receive(:save)
 
     put '/assessments', params
+  end
+end
+
+describe "get a person" do
+  before(:each) do
+    class_double('Person').as_stubbed_const(:transfer_nested_constants => true)
+  end
+
+  it "update assessments for the person with a matching id" do
+    allow(Person).to receive(:find).with('456').and_return('name' => 'sue')
+    get '/person/456'
+    expect(last_response.body).to eq('{"name":"sue"}')
   end
 end
