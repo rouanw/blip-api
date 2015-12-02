@@ -14,6 +14,10 @@ use OmniAuth::Builder do
 end
 
 before do
+  cache_control :public, :must_revalidate, :max_age => 0
+end
+
+before do
   pass if request.path_info =~ /^\/auth\//
   redirect to ('/auth/twitter') unless session[:uid]
 end
@@ -31,7 +35,8 @@ get '/auth/:provider/callback' do
 end
 
 get '/person' do
-  json Person.find_by(uid: session[:uid], provider: session[:provider])
+  person = Person.find_by(uid: session[:uid], provider: session[:provider])
+  json person
 end
 
 put '/assessments' do
