@@ -4,13 +4,6 @@ def app
   Sinatra::Application
 end
 
-describe "status endpoint" do
-  it "should return running" do
-    get '/status'
-    expect(last_response.body).to include '{"status":"running"}'
-  end
-end
-
 describe "oauth login" do
 
   before(:each) do
@@ -24,10 +17,10 @@ describe "oauth login" do
     expect(last_response.status).to be 200
   end
 
-  it "should return the person created" do
+  it "should return a message saying that authentication is complete" do
     allow(Person).to receive(:find_or_create_by).and_return({name: 'someone', uid: '123'})
     get '/auth/twitter/callback'
-    expect(last_response.body).to include '{"name":"someone","uid":"123"}'
+    expect(last_response.body).to include 'You have successfully signed in. Please close this window to continue.'
   end
 
   it "should find or create a person with provider and uid" do
@@ -49,6 +42,35 @@ describe "oauth login" do
     get '/auth/twitter/callback'
     expect(@bob.info).to eq(auth[:info])
   end
+
+  it "should set provider and uid on session" do
+    auth = {
+      :provider => 'twitter',
+      :uid => '123545'
+    }
+    OmniAuth.config.mock_auth[:twitter] = OmniAuth::AuthHash.new(auth)
+    allow(Person).to receive(:find_or_create_by).with(provider: auth[:provider], uid: auth[:uid])
+    get '/auth/twitter/callback'
+    expect(last_request.env['rack.session']['uid']).to eq('123545')
+    expect(last_request.env['rack.session']['provider']).to eq('twitter')
+  end
+end
+
+describe "authentication middleware" do
+  it "should allow requests for auth routes to pass" do
+    get '/auth/notfound'
+    expect(last_response.status).to be 404
+  end
+
+  it "should redirect other routes" do
+    get '/notfound'
+    expect(last_response.status).to be 302
+  end
+
+  it "should not redirect other routes if user is authenticated" do
+    get '/notfound', {}, {'rack.session' => {'uid' => '444'}}
+    expect(last_response.status).to be 404
+  end
 end
 
 describe "update assessment" do
@@ -56,15 +78,15 @@ describe "update assessment" do
     class_double('Person').as_stubbed_const(:transfer_nested_constants => true)
   end
 
-  it "update assessments for the person with a matching id" do
-    params = {:person_id => '123', :assessments => ['assessment', 'assessment2']}
+  it "update assessments for the person with matching auth properties" do
+    data = ['assessment', 'assessment2']
     found = double('found person')
-    allow(Person).to receive(:find).with('123').and_return(found)
+    allow(Person).to receive(:find_by).with({uid: "456", provider: "twitter"}).and_return(found)
 
-    expect(found).to receive(:assessments=).with(params[:assessments])
+    expect(found).to receive(:assessments=).with(data)
     expect(found).to receive(:save)
 
-    put '/assessments', params
+    put '/assessments', data.to_json, {'rack.session' => {'uid' => '456', 'provider' => 'twitter'}}
   end
 end
 
@@ -73,9 +95,9 @@ describe "get a person" do
     class_double('Person').as_stubbed_const(:transfer_nested_constants => true)
   end
 
-  it "update assessments for the person with a matching id" do
-    allow(Person).to receive(:find).with('456').and_return('name' => 'sue')
-    get '/person/456'
+  it "update assessments for the person with matching uid and provider" do
+    allow(Person).to receive(:find_by).with({uid: "456", provider: "twitter"}).and_return('name' => 'sue')
+    get '/person', {}, {'rack.session' => {'uid' => '456', 'provider' => 'twitter'}}
     expect(last_response.body).to eq('{"name":"sue"}')
   end
 end
